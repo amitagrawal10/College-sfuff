@@ -1,0 +1,521 @@
+amit@ubuntu:~$ sudo mysql -u root -p
+[sudo] password for amit: 
+Sorry, try again.
+[sudo] password for amit: 
+Sorry, try again.
+[sudo] password for amit: 
+
+[1]+  Stopped                 sudo mysql -u root -p
+amit@ubuntu:~$  mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.27-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database myuniversity;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create table university
+    -> (uid int primary key,
+    -> uname varchar(50) not null unique,
+    -> ulocation varchar(50) not null);
+ERROR 1046 (3D000): No database selected
+mysql> use myuniversity;
+Database changed
+mysql> create table university (uid int primary key, uname varchar(50) not null unique, ulocation varchar(50) not null);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe university;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| uid       | int(11)     | NO   | PRI | NULL    |       |
+| uname     | varchar(50) | NO   | UNI | NULL    |       |
+| ulocation | varchar(50) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.03 sec)
+
+mysql> insert into university values(100,"MIt","pune");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into university values(101,"vit","pune");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into university values(102,"coep","pune");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into university values(103,"pict","pune");
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from university
+    -> ;
++-----+-------+-----------+
+| uid | uname | ulocation |
++-----+-------+-----------+
+| 100 | MIt   | pune      |
+| 101 | vit   | pune      |
+| 102 | coep  | pune      |
+| 103 | pict  | pune      |
++-----+-------+-----------+
+4 rows in set (0.01 sec)
+
+mysql> create table faculty;
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> create table faculty
+    -> (fid int primary key,
+    -> fname varchar(50)not null,
+    -> uid int,
+    -> foreign key referances university(uid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'university(uid)' at line 5
+mysql> create table faculty (fid int primary key, fname varchar(50)not null, uid int, foreign key referances university(uid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'university(uid))' at line 1
+mysql> create table faculty (fid int primary key, fname varchar(50) not null, uid int, foreign key referances university(uid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'university(uid))' at line 1
+mysql> create table faculty(
+    ->     -> fid int primary key,
+    ->     -> fname varchar(30) not null,
+    ->     -> uid int,
+    ->     -> fname varchar(30) not null,
+    -> 
+    -> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-> fid int primary key,
+    -> fname varchar(30) not null,
+    -> uid int,
+    -' at line 2
+mysql> create table faculty( fid int primary key,   fname varchar(30) not null,uid int, fname varchar(30) not null,; ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create table faculty(
+    -> fid int primary key,
+    -> fname varchar(30) not null,
+    -> uid int,
+    -> foreign key(uid) referances university(uid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'referances university(uid)' at line 5
+mysql> create table faculty( fid int primary key, fname varchar(30) not null, uid int, foreign key(uid) referances university(uid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'referances university(uid))' at line 1
+mysql> create table faculty( fid int primary key, fname varchar(30) not null, uid int, foreign key(uid) references university(uid));
+[2]+  Stopped                 mysql -u root -p
+amit@ubuntu:~$  mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.27-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use database myuniversity;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use myuniversity;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create table faculty( fid int primary key, fname varchar(30) not null, uid int, foreign key(uid) references university(uid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe faculty;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| fid   | int(11)     | NO   | PRI | NULL    |       |
+| fname | varchar(30) | NO   |     | NULL    |       |
+| uid   | int(11)     | YES  | MUL | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into faculty values(1,"engineering",100);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into faculty values(2,"law",101);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into faculty values(3,"manegement",102);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into faculty values(3,"manegement",102);
+ERROR 1062 (23000): Duplicate entry '3' for key 'PRIMARY'
+mysql> insert into faculty values(4,"bba",103);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+-------------+------+
+| fid | fname       | uid  |
++-----+-------------+------+
+|   1 | engineering |  100 |
+|   2 | law         |  101 |
+|   3 | manegement  |  102 |
+|   4 | bba         |  103 |
++-----+-------------+------+
+4 rows in set (0.00 sec)
+
+mysql> create table school(
+    -> sid int primary key,
+    -> sname varchar(30) not null ,
+    -> intake int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> create table school( sid int primary key, sname varchar(30) not null , intake int,
+    -> fid int,
+    -> foreign key (fid) references faculty (fid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe school;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | int(11)     | NO   | PRI | NULL    |       |
+| sname  | varchar(30) | NO   |     | NULL    |       |
+| intake | int(11)     | YES  |     | NULL    |       |
+| fid    | int(11)     | YES  | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into school values(10,"cet",420,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into school values(10,"me",120,1);
+ERROR 1062 (23000): Duplicate entry '10' for key 'PRIMARY'
+mysql> insert into school values(11,"me",120,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into school values(12,"ece",220,1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select from * school;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from * school' at line 1
+mysql> select * from school;
++-----+-------+--------+------+
+| sid | sname | intake | fid  |
++-----+-------+--------+------+
+|  10 | cet   |    420 |    1 |
+|  11 | me    |    120 |    1 |
+|  12 | ece   |    220 |    1 |
++-----+-------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> create table program(
+    -> pid int primary key,
+    -> pname varchar(30) not null,
+    -> duration int,
+    -> sid int,
+    -> foreign key(sid) references school(ssid));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> create table program( pid int primary key, pname varchar(30) not null, duration int, sid int, foreign key(sid) references school(sid)); Query OK, 0 rows affected (0.04 sec)
+
+mysql> describe program
+    -> ;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| pid      | int(11)     | NO   | PRI | NULL    |       |
+| pname    | varchar(30) | NO   |     | NULL    |       |
+| duration | int(11)     | YES  |     | NULL    |       |
+| sid      | int(11)     | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into program values(1001,"fy",1,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into program values(1002,"sy",1,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into program values(1003,"ty",1,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into program values(1004,"btech",1,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from program;
++------+-------+----------+------+
+| pid  | pname | duration | sid  |
++------+-------+----------+------+
+| 1001 | fy    |        1 |   10 |
+| 1002 | sy    |        1 |   10 |
+| 1003 | ty    |        1 |   10 |
+| 1004 | btech |        1 |   10 |
++------+-------+----------+------+
+4 rows in set (0.00 sec)
+
+mysql> create table course(
+    -> cid int primary key,
+    -> cname varchar(30) not null,
+    -> credits int,
+    -> pid int,
+    -> foreign key  (pid) refrences program(pid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refrences program(pid)' at line 6
+mysql> create table course( cid int primary key, cname varchar(30) not null, credits int, pid int, foreign key  (pid) refrences program(pid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refrences program(pid))' at line 1
+mysql> create table course( cid int primary key, cname varchar(30) not null, credits int, pid int, foreign key(pid) refrences program(pid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refrences program(pid))' at line 1
+mysql> create table course( cid int primary key, cname varchar(30) not null, credits int, pid int, foreign key(pid) refernces program(pid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'refernces program(pid))' at line 1
+mysql> create table course( cid int primary key, cname varchar(30) not null, credits int, pid int, foreign key(pid) references program(pid));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into course values(101,"m1",3,10001);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`myuniversity`.`course`, CONSTRAINT `course_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `program` (`pid`))
+mysql> insert into course values(101,"m1",3,1001);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into course values(121,"ppl",3,1002);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into course values(131,"dbms",3,1003);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into course values(131,"ml",3,1004);
+ERROR 1062 (23000): Duplicate entry '131' for key 'PRIMARY'
+mysql> insert into course values(141,"ml",3,1004);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from course;
++-----+-------+---------+------+
+| cid | cname | credits | pid  |
++-----+-------+---------+------+
+| 101 | m1    |       3 | 1001 |
+| 121 | ppl   |       3 | 1002 |
+| 131 | dbms  |       3 | 1003 |
+| 141 | ml    |       3 | 1004 |
++-----+-------+---------+------+
+4 rows in set (0.00 sec)
+
+mysql> create table lecturer(
+    -> lid int primary key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> create table lecturer( lid int primary key.
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.' at line 1
+mysql> create table lecturer( lid int primary key,
+    -> lname varchar(30) not null,
+    -> specilization varchar(30) ,
+    -> salary int check(salary>0),
+    -> sid int,
+    -> foreign key (sid) references school (sid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> describe lectrer;
+ERROR 1146 (42S02): Table 'myuniversity.lectrer' doesn't exist
+mysql> describe lecturer;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| lid           | int(11)     | NO   | PRI | NULL    |       |
+| lname         | varchar(30) | NO   |     | NULL    |       |
+| specilization | varchar(30) | YES  |     | NULL    |       |
+| salary        | int(11)     | YES  |     | NULL    |       |
+| sid           | int(11)     | YES  | MUL | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> insert into lecturer values(123,"vaidehi deshmukh","iee",1000000,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into lecturer values(345,"vaishali joshi","m1",1000000,10);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from lecturer
+    -> ;
++-----+------------------+---------------+---------+------+
+| lid | lname            | specilization | salary  | sid  |
++-----+------------------+---------------+---------+------+
+| 123 | vaidehi deshmukh | iee           | 1000000 |   10 |
+| 345 | vaishali joshi   | m1            | 1000000 |   10 |
++-----+------------------+---------------+---------+------+
+2 rows in set (0.01 sec)
+
+mysql> create table student(
+    -> stid int primary key,
+    -> staname varchar(30) not null,
+    -> addresss varchar(30),
+    -> pid int,
+    -> foreign key(pid) references program(pid));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into student values(1234,"amit agrawal","kothrud",1003);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values(2234,"achal agrawal","kothrud",1003);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student;
++------+---------------+----------+------+
+| stid | staname       | addresss | pid  |
++------+---------------+----------+------+
+| 1234 | amit agrawal  | kothrud  | 1003 |
+| 2234 | achal agrawal | kothrud  | 1003 |
++------+---------------+----------+------+
+2 rows in set (0.00 sec)
+
+mysql> create table enrolled(
+    -> stid int ,
+    -> cid int,
+    -> primary key(stid ,cid),
+    -> foreign key(stid) references student (stid),
+    -> foreign key(cid) references course(cid);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 6
+mysql> create table enrolled( stid int , cid int, primary key(stid ,cid), foreign key(stid) references student (stid), foreign key(cid) references course(cid));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> descrbe enrolled;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'descrbe enrolled' at line 1
+mysql> describe enrolled;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| stid  | int(11) | NO   | PRI | NULL    |       |
+| cid   | int(11) | NO   | PRI | NULL    |       |
++-------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table taught(
+    ->  cid int,
+    -> lid int,
+    -> primary key(cid,lid),
+    -> foreign key(cid) references course(cid),
+    -> foreign key(lid) references lecturer(lid));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> descibe taught;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'descibe taught' at line 1
+mysql> describe taught;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| cid   | int(11) | NO   | PRI | NULL    |       |
+| lid   | int(11) | NO   | PRI | NULL    |       |
++-------+---------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_myuniversity |
++------------------------+
+| course                 |
+| enrolled               |
+| faculty                |
+| lecturer               |
+| program                |
+| school                 |
+| student                |
+| taught                 |
+| university             |
++------------------------+
+9 rows in set (0.00 sec)
+
+mysql> alter table lecturer
+    -> add column aadahr int unique;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe lecturer
+    -> ;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| lid           | int(11)     | NO   | PRI | NULL    |       |
+| lname         | varchar(30) | NO   |     | NULL    |       |
+| specilization | varchar(30) | YES  |     | NULL    |       |
+| salary        | int(11)     | YES  |     | NULL    |       |
+| sid           | int(11)     | YES  | MUL | NULL    |       |
+| aadahr        | int(11)     | YES  | UNI | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> alter table lecturer
+    -> modify lname varchar(50);
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe lecturer
+    -> ;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| lid           | int(11)     | NO   | PRI | NULL    |       |
+| lname         | varchar(50) | YES  |     | NULL    |       |
+| specilization | varchar(30) | YES  |     | NULL    |       |
+| salary        | int(11)     | YES  |     | NULL    |       |
+| sid           | int(11)     | YES  | MUL | NULL    |       |
+| aadahr        | int(11)     | YES  | UNI | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> show create table lecturer
+    -> ;
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                                                                                                                                                                                                                                                                                                            |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| lecturer | CREATE TABLE `lecturer` (
+  `lid` int(11) NOT NULL,
+  `lname` varchar(50) DEFAULT NULL,
+  `specilization` varchar(30) DEFAULT NULL,
+  `salary` int(11) DEFAULT NULL,
+  `sid` int(11) DEFAULT NULL,
+  `aadahr` int(11) DEFAULT NULL,
+  PRIMARY KEY (`lid`),
+  UNIQUE KEY `aadahr` (`aadahr`),
+  KEY `sid` (`sid`),
+  CONSTRAINT `lecturer_ibfk_1` FOREIGN KEY (`sid`) REFERENCES `school` (`sid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
++----------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> commit
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set autocommit=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into enrolled values(3324,222);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`myuniversity`.`enrolled`, CONSTRAINT `enrolled_ibfk_1` FOREIGN KEY (`stid`) REFERENCES `student` (`stid`))
+mysql> insert into enrolled values(1234,101);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from enrolled;
++------+-----+
+| stid | cid |
++------+-----+
+| 1234 | 101 |
++------+-----+
+1 row in set (0.00 sec)
+
+mysql> commit
+    -> ;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delete from enrolled;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from enrolled;
+Empty set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select *  from enrolled;
++------+-----+
+| stid | cid |
++------+-----+
+| 1234 | 101 |
++------+-----+
+1 row in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+
