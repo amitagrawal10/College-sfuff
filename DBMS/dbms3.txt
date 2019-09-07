@@ -1,0 +1,528 @@
+amit@ubuntu:~$ sudo mysql -u root -p
+[sudo] password for amit: 
+Sorry, try again.
+[sudo] password for amit: 
+
+[1]+  Stopped                 sudo mysql -u root -p
+amit@ubuntu:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.27-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database company
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use company;
+Database changed
+mysql> create table dept(
+    -> deptno int primary key,
+    -> dname varchar(30) not null,
+    -> loc varchar(50),not null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null)' at line 4
+mysql> create table dept( deptno int primary key, dname varchar(30) not null, loc varchar(50)not null);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> desc dept
+    -> ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| deptno | int(11)     | NO   | PRI | NULL    |       |
+| dname  | varchar(30) | NO   |     | NULL    |       |
+| loc    | varchar(50) | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.02 sec)
+
+mysql> describe dept;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| deptno | int(11)     | NO   | PRI | NULL    |       |
+| dname  | varchar(30) | NO   |     | NULL    |       |
+| loc    | varchar(50) | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table emp(
+    -> empno int primary key,
+    -> ename varchar(30) not null,
+    -> job char(30) not null,
+    -> mgr int unique,
+    -> hire_date date not null,
+    -> sal int check(sal>30),
+    -> comm int not null,
+    -> deptno int,
+    -> foreign key fk1(deptno) references dept(deptno));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc emp;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| empno     | int(11)     | NO   | PRI | NULL    |       |
+| ename     | varchar(30) | NO   |     | NULL    |       |
+| job       | char(30)    | NO   |     | NULL    |       |
+| mgr       | int(11)     | YES  | UNI | NULL    |       |
+| hire_date | date        | NO   |     | NULL    |       |
+| sal       | int(11)     | YES  |     | NULL    |       |
+| comm      | int(11)     | NO   |     | NULL    |       |
+| deptno    | int(11)     | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> insert into dept values(10,"accountng","new york");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into dept values(10,"research","dallas");
+ERROR 1062 (23000): Duplicate entry '10' for key 'PRIMARY'
+mysql> insert into dept values(20,"research","dallas");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into dept values(30,"sales","chicago");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into dept values(40,"operations","boston");
+Query OK, 1 row affected (0.00 sec)
+
+amit@ubuntu:~$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.27-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use company
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> desc emp;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| empno     | int(11)     | NO   | PRI | NULL    |       |
+| ename     | varchar(30) | NO   |     | NULL    |       |
+| job       | char(30)    | NO   |     | NULL    |       |
+| mgr       | int(11)     | YES  | UNI | NULL    |       |
+| hire_date | date        | NO   |     | NULL    |       |
+| sal       | int(11)     | YES  |     | NULL    |       |
+| comm      | int(11)     | NO   |     | NULL    |       |
+| deptno    | int(11)     | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> insert into emp values(7369,"smith","clerk",7902,"1980-12-17",800,300,20);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into emp values(7499,"allen","salesman",7698,"1981-02-20",1600,300,30);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++-------+-------+----------+------+------------+------+------+--------+
+| empno | ename | job      | mgr  | hire_date  | sal  | comm | deptno |
++-------+-------+----------+------+------------+------+------+--------+
+|  7369 | smith | clerk    | 7902 | 1980-12-17 |  800 |  300 |     20 |
+|  7499 | allen | salesman | 7698 | 1981-02-20 | 1600 |  300 |     30 |
++-------+-------+----------+------+------------+------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | accountng  | new york |
+|     20 | research   | dallas   |
+|     30 | sales      | chicago  |
+|     40 | operations | boston   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> insert into emp values(7126,"roshni","secretory",7678,"1982-12-05",5000,600,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp values(7036,"shruti","manager",7178,"1982-12-06",7000,600,40);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp values(7622,"rahul","ceo",7204,"1984-10-05",10000,800,20);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1600 |  300 |     30 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select count(*) from emp
+    -> where depno=20;
+ERROR 1054 (42S22): Unknown column 'depno' in 'where clause'
+mysql> select count(*) from emp where deptno=20;
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*),avg(sal) from emp where deptno=20;
++----------+-----------+
+| count(*) | avg(sal)  |
++----------+-----------+
+|        2 | 5400.0000 |
++----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select ename,sal,(0.1*sal) as PF from emp;
++--------+-------+--------+
+| ename  | sal   | PF     |
++--------+-------+--------+
+| shruti |  7000 |  700.0 |
+| roshni |  5000 |  500.0 |
+| smith  |   800 |   80.0 |
+| allen  |  1600 |  160.0 |
+| rahul  | 10000 | 1000.0 |
++--------+-------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp
+    -> order by sal;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1600 |  300 |     30 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> slect ename ,hire_date
+    -> from emp
+    -> order by hire_date desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'slect ename ,hire_date
+from emp
+order by hire_date desc' at line 1
+mysql> select ename ,hire_date from emp order by hire_date desc;
++--------+------------+
+| ename  | hire_date  |
++--------+------------+
+| rahul  | 1984-10-05 |
+| shruti | 1982-12-06 |
+| roshni | 1982-12-05 |
+| allen  | 1981-02-20 |
+| smith  | 1980-12-17 |
++--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select ename ,sal,(0.1*sal) as PF,(0.5*sal)as HRA ,(0.3*sal) as DA ,(0.1*sal+0.5*sal+0.3*sal+sal) as Gross from emp order by Gross;
++--------+-------+--------+--------+--------+---------+
+| ename  | sal   | PF     | HRA    | DA     | Gross   |
++--------+-------+--------+--------+--------+---------+
+| smith  |   800 |   80.0 |  400.0 |  240.0 |  1520.0 |
+| allen  |  1600 |  160.0 |  800.0 |  480.0 |  3040.0 |
+| roshni |  5000 |  500.0 | 2500.0 | 1500.0 |  9500.0 |
+| shruti |  7000 |  700.0 | 3500.0 | 2100.0 | 13300.0 |
+| rahul  | 10000 | 1000.0 | 5000.0 | 3000.0 | 19000.0 |
++--------+-------+--------+--------+--------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select deptno,count(*)
+    -> from emp
+    -> group  by deptno;
++--------+----------+
+| deptno | count(*) |
++--------+----------+
+|     10 |        1 |
+|     20 |        2 |
+|     30 |        1 |
+|     40 |        1 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+mysql> update emp
+    -> set sal=sal*1.1
+    -> where job="salesman";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select sum(sal),max(sal),min(sal),avg(sal)
+    -> from emp
+    -> where deptno=20;
++----------+----------+----------+-----------+
+| sum(sal) | max(sal) | min(sal) | avg(sal)  |
++----------+----------+----------+-----------+
+|    10800 |    10000 |      800 | 5400.0000 |
++----------+----------+----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select
+    -> (ename)
+    -> from emp
+    -> where ename like "__i%";
++-------+
+| ename |
++-------+
+| smith |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select max(sal) from emp where job="Salesman";
++----------+
+| max(sal) |
++----------+
+|     1760 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> update emp set sal=sal*1.1 where job="Salesman";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> slect * from emp;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'slect * from emp' at line 1
+mysql> select * from emp;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1936 |  300 |     30 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select ename ,deptno,(sal*12) as Annual_sal from emp;
++--------+--------+------------+
+| ename  | deptno | Annual_sal |
++--------+--------+------------+
+| shruti |     40 |      84000 |
+| roshni |     10 |      60000 |
+| smith  |     20 |       9600 |
+| allen  |     30 |      23232 |
+| rahul  |     20 |     120000 |
++--------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select ename, deptno,(sal*12)as Annual_sal from emp order by deptnono;
+ERROR 1054 (42S22): Unknown column 'deptnono' in 'order clause'
+mysql> select ename, deptno,(sal*12)as Annual_sal from emp order by deptno;
++--------+--------+------------+
+| ename  | deptno | Annual_sal |
++--------+--------+------------+
+| roshni |     10 |      60000 |
+| smith  |     20 |       9600 |
+| rahul  |     20 |     120000 |
+| allen  |     30 |      23232 |
+| shruti |     40 |      84000 |
++--------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp
+    -> order by sal desc
+    -> limit 2,1;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7126 | roshni | secretory | 7678 | 1982-12-05 | 5000 |  600 |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp order by sal limit 3,1;
++-------+--------+---------+------+------------+------+------+--------+
+| empno | ename  | job     | mgr  | hire_date  | sal  | comm | deptno |
++-------+--------+---------+------+------------+------+------+--------+
+|  7036 | shruti | manager | 7178 | 1982-12-06 | 7000 |  600 |     40 |
++-------+--------+---------+------+------------+------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp order by sal;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1936 |  300 |     30 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp oredr by sal limit 3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by sal limit 3' at line 1
+mysql> select * from emp oredr by sal limit 3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by sal limit 3' at line 1
+mysql> select * from emp order by sal limit 3;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |  800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 | 1936 |  300 |     30 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 | 5000 |  600 |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> insert into emp values(7036,"shruti","manager",7178,"1986-12-06",7000,600,"NULL");
+ERROR 1366 (HY000): Incorrect integer value: 'NULL' for column 'deptno' at row 1
+mysql> insert into emp values(7036,"shruti","manager",7178,"1986-12-06",7000,600,"NULL");
+ERROR 1366 (HY000): Incorrect integer value: 'NULL' for column 'deptno' at row 1
+mysql> insert into emp values(7036,"shruti","manager",7178,"1986-12-06",7000,600,'NULL');
+ERROR 1366 (HY000): Incorrect integer value: 'NULL' for column 'deptno' at row 1
+mysql> select  * from emp;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1936 |  300 |     30 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp
+    -> where deptno is NULL;
+Empty set (0.00 sec)
+
+mysql> insert into emp values(7016,"harshit","manager",7178,"1986-12-06",7000,600,'NULL');
+ERROR 1366 (HY000): Incorrect integer value: 'NULL' for column 'deptno' at row 1
+mysql> select * from emp where mod(sal,2)=1;
+Empty set (0.00 sec)
+
+mysql> select * from emp where mod(sal,2)=0;
++-------+--------+-----------+------+------------+-------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal   | comm | deptno |
++-------+--------+-----------+------+------------+-------+------+--------+
+|  7036 | shruti | manager   | 7178 | 1982-12-06 |  7000 |  600 |     40 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 |  5000 |  600 |     10 |
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |   800 |  300 |     20 |
+|  7499 | allen  | salesman  | 7698 | 1981-02-20 |  1936 |  300 |     30 |
+|  7622 | rahul  | ceo       | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+--------+-----------+------+------------+-------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from emp where length(sal)=3;
++-------+-------+-------+------+------------+------+------+--------+
+| empno | ename | job   | mgr  | hire_date  | sal  | comm | deptno |
++-------+-------+-------+------+------------+------+------+--------+
+|  7369 | smith | clerk | 7902 | 1980-12-17 |  800 |  300 |     20 |
++-------+-------+-------+------+------------+------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select from emp where month(hire_date)="12";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp where month(hire_date)="12"' at line 1
+mysql> select *  from emp where month(hire_date)="12";
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hire_date  | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7036 | shruti | manager   | 7178 | 1982-12-06 | 7000 |  600 |     40 |
+|  7126 | roshni | secretory | 7678 | 1982-12-05 | 5000 |  600 |     10 |
+|  7369 | smith  | clerk     | 7902 | 1980-12-17 |  800 |  300 |     20 |
++-------+--------+-----------+------+------------+------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp where ename like "%a%";
++-------+-------+----------+------+------------+-------+------+--------+
+| empno | ename | job      | mgr  | hire_date  | sal   | comm | deptno |
++-------+-------+----------+------+------------+-------+------+--------+
+|  7499 | allen | salesman | 7698 | 1981-02-20 |  1936 |  300 |     30 |
+|  7622 | rahul | ceo      | 7204 | 1984-10-05 | 10000 |  800 |     20 |
++-------+-------+----------+------+------------+-------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select dayname(hire_date) from emp;
++--------------------+
+| dayname(hire_date) |
++--------------------+
+| Monday             |
+| Sunday             |
+| Wednesday          |
+| Friday             |
+| Friday             |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> select char_length(ename) from emp;
++--------------------+
+| char_length(ename) |
++--------------------+
+|                  6 |
+|                  6 |
+|                  5 |
+|                  5 |
+|                  5 |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> select char_length(ename),ename from emp;
++--------------------+--------+
+| char_length(ename) | ename  |
++--------------------+--------+
+|                  6 | shruti |
+|                  6 | roshni |
+|                  5 | smith  |
+|                  5 | allen  |
+|                  5 | rahul  |
++--------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select ename from emp where sal<1000 order by sal;
++-------+
+| ename |
++-------+
+| smith |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select ename ,hire_date from emp where hire_date=(select min(hire_date) from emp);
++-------+------------+
+| ename | hire_date  |
++-------+------------+
+| smith | 1980-12-17 |
++-------+------------+
+1 row in set (0.00 sec)
+
+mysql> select ename,(year(curdate())-year(hire_date)) as experience from emp;
++--------+------------+
+| ename  | experience |
++--------+------------+
+| shruti |         37 |
+| roshni |         37 |
+| smith  |         39 |
+| allen  |         38 |
+| rahul  |         35 |
++--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select ename ,(year(curdate()-year(hire_date)) as experience,hire_date from emp order by experience;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as experience,hire_date from emp order by experience' at line 1
+mysql> select ename ,(year(curdate()-year(hire_date)) as experience,hire_date from emp order by experience;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as experience,hire_date from emp order by experience' at line 1
+mysql> commit
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
