@@ -25,6 +25,7 @@ for l in text:
 		s3+=s4[a]
 	
 
+s3=s3.upper()
 
 print("cipher text is;",s3)
 
