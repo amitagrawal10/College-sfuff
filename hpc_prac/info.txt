@@ -1,0 +1,10 @@
+
+gcc --version
+
+
+
+echo |cpp -fopenmp -dM |grep -i open
+
+
+gcc -fopenmp hpc2.cpp
+
